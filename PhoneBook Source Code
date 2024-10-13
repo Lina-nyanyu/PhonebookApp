@@ -1,0 +1,165 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+
+class Contact{
+    private String name;
+    public String phoneNumber;
+
+    public Contact(String name, String phoneNumber){
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
+
+    @Override
+    public String toString(){
+        return "Name Of Contact : "+ name + "Contact number : " + phoneNumber;
+    }
+}
+
+class PhoneBook{
+    private List<Contact>contacts;
+
+    public PhoneBook(){
+        contacts = new ArrayList<>();
+    }
+
+    //insert contact Fuction
+    public void insertContact(String name, String phoneNumber){
+        Contact contact = new Contact(name, phoneNumber);
+        contacts.add(contact);
+        System.out.println("Contact" + name + "Added.");
+    }
+
+    //search For contact function
+    public Contact searchContact(String searchName){
+        for (Contact contact : contacts){
+            if (contact.getName().equalsIgnoreCase(searchName)){
+                System.out.println("Contact found : "+ contact );
+                return contact;
+            }
+        }
+        System.out.println("Contact not found.");
+        return null;
+    }
+
+    //displaying contacts
+    public void displayContacts(){
+        if (contacts.isEmpty()){
+            System.out.println("PhoneBook is Empty");
+        }else{
+            for (Contact contact:contacts){
+                System.out.println(contact);
+            }
+        }
+    }
+
+    //deleting a contact
+    public void deleteContact(String deleteName){
+        for (int i = 0; i < contacts.size(); i++){
+            if (contacts.get(i).getName().equalsIgnoreCase(deleteName)){
+                contacts.remove(i);
+                System.out.println("Contact " + deleteName + "Deleted.");
+                return;
+            }
+        }
+        System.out.println("Contact noy found.");
+    }
+
+    //updating a contact's information
+    public void updateContact(String updateName, String newPhoneNumber){
+        for (Contact contact : contacts){
+            if (contact.getName().equalsIgnoreCase(updateName)){
+                contact.phoneNumber = newPhoneNumber;
+                System.out.println("Contact " + updateName + "Updated.");
+                return;
+            }
+        }
+        System.out.println("Contact not found.");
+    }
+
+    //sorting contacts
+    public void sortContacts(){
+        contacts.sort(Comparator.comparing(Contact ::getName));
+        System.out.println("Contacts sorted by name.");
+    }
+}
+
+public class Main{
+    public static void main(String[] args){
+
+        PhoneBook phoneBook = new PhoneBook();
+        Scanner scanner = new Scanner(System.in);
+        String choice;
+
+        do {
+            System.out.println("\nPhoneBook Menu:");
+            System.out.println("1. Add Contact");
+            System.out.println("2. Search Contact");
+            System.out.println("3. Update Contact");
+            System.out.println("4. Delete Contact");
+            System.out.println("5. Display Contacts");
+            System.out.println("6. Sort Contacts");
+            System.out.println("7. Exit");
+            System.out.print("Choose an Option: ");
+            choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.print("Enetr contact name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter Phone Number: ");
+                    String phoneNumber = scanner.nextLine();
+                    phoneBook.insertContact(name, phoneNumber);
+                    break;
+
+                case "2":
+                    System.out.print("Enter contact name to search: ");
+                    String searchName = scanner.nextLine();
+                    phoneBook.searchContact(searchName);
+                    break;
+
+                case "3":
+                    System.out.print("Enter contact name to update: ");
+                    String updateName = scanner.nextLine();
+                    System.out.print("Enter new phone number: ");
+                    String newPhoneNumber = scanner.nextLine();
+                    phoneBook.updateContact(updateName, newPhoneNumber);
+                    break;
+
+                case "4":
+                    System.out.print("Enetr contact name to delete: ");
+                    String deleteName = scanner.nextLine();
+                    phoneBook.deleteContact(deleteName);
+                    break;
+
+                case "5":
+                    phoneBook.displayContacts();
+                    break;
+
+                case "6":
+                    phoneBook.sortContacts();
+                    break;
+
+                case "7":
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid Option. Please try again.");
+            }
+        }while(!choice.equals("7"));
+
+        scanner.close();
+
+        }
+}
